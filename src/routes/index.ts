@@ -1,10 +1,13 @@
 import { Router } from "express";
 import pingRoutes from "../ping/ping.routes.ts";
 import { adminController } from "../admin/admin.controller.ts";
+import { devicesController } from "../devices/devices.controller.ts";
 
 const router = Router();
 
 router.use(pingRoutes);
+
+router.post("/devices/register", devicesController.register);
 
 const checkAdminApiKey = (req, res, next) => {
   const adminApiKey = req.headers["x-admin-api-key"];
