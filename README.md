@@ -33,15 +33,15 @@ curl http://localhost:3000/ping
 
 ## Scripts disponibles
 
-| Commande | Description |
-|----------|-------------|
-| `pnpm start` | Lance le serveur |
-| `pnpm watch` | Lance le serveur en mode watch (développement) |
-| `pnpm typecheck` | Vérifie les types TypeScript |
-| `pnpm simulate:device` | Simule un device IoT |
-| `pnpm admin:approve-device <deviceId>` | Approuve un device |
-| `pnpm admin:revoke-device <deviceId>` | Révoque un device |
-| `pnpm db:reset` | Remet à zéro la base de données |
+| Commande                               | Description                                    |
+| -------------------------------------- | ---------------------------------------------- |
+| `pnpm start`                           | Lance le serveur                               |
+| `pnpm watch`                           | Lance le serveur en mode watch (développement) |
+| `pnpm typecheck`                       | Vérifie les types TypeScript                   |
+| `pnpm simulate:device`                 | Simule un device IoT                           |
+| `pnpm admin:approve-device <deviceId>` | Approuve un device                             |
+| `pnpm admin:revoke-device <deviceId>`  | Révoque un device                              |
+| `pnpm db:reset`                        | Remet à zéro la base de données                |
 
 ## Structure du projet
 
@@ -67,14 +67,14 @@ Consultez le fichier **CONSIGNES.md** pour les spécifications complètes du pro
 ### Endpoints à développer
 
 **Device (auth: `x-device-key`)**
-- `POST /devices/register` - Demande d'accès
-- `GET /devices/me` - Consulter son status
+- `POST /devices/register` - Demande d'accès (à faire en 1)
+- `GET /devices/me` - Consulter son statu (à faire en 2)
 - `POST /telemetry` - Envoyer une mesure
 
 **Admin (auth: `x-api-key`)**
 - `GET /admin/devices` - Liste des devices
 - `GET /admin/devices/:id` - Détail d'un device
-- `POST /admin/devices/:id/approve` - Approuver un device
+- `POST /admin/devices/:id/approve` - Approuver un device (à faire en 3)
 - `POST /admin/devices/:id/revoke` - Révoquer un device
 - `GET /admin/devices/:id/telemetry` - Mesures paginées
 - `GET /admin/devices/:id/telemetry/latest` - Dernière mesure
@@ -82,8 +82,8 @@ Consultez le fichier **CONSIGNES.md** pour les spécifications complètes du pro
 
 ## Variables d'environnement
 
-| Variable | Description | Défaut |
-|----------|-------------|--------|
-| `MONGODB_URI` | URI de connexion MongoDB | `mongodb://localhost:27017/iot_monitoring` |
-| `PORT` | Port du serveur | `3000` |
-| `ADMIN_API_KEY` | Clé API pour l'authentification admin | - |
+| Variable        | Description                           | Défaut                                     |
+| --------------- | ------------------------------------- | ------------------------------------------ |
+| `MONGODB_URI`   | URI de connexion MongoDB              | `mongodb://localhost:27017/iot_monitoring` |
+| `PORT`          | Port du serveur                       | `3000`                                     |
+| `ADMIN_API_KEY` | Clé API pour l'authentification admin | -                                          |
