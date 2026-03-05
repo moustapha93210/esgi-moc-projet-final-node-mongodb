@@ -31,3 +31,6 @@ coverage/
 # Misc
 *.tgz
 .claude/
+
+# No use
+.obsidian/
