@@ -1,5 +1,7 @@
 import { type Request, type Response, type NextFunction, Router } from "express";
 import pingRoutes from "../ping/ping.routes.ts";
+import devicesRoutes from "./devices.routes.ts";
+
 
 const router = Router();
 
@@ -14,6 +16,13 @@ const checkAdminApiKey = (req: Request, res: Response, next: NextFunction) => {
     next();
 }
 
+
+// Pour les routes en tant que rien
+router.use("/devices", devicesRoutes);
+
+
+
+// Pour les routes en tant que admin
 const adminRoutes = Router();
 
 adminRoutes.use("/admin/devices/:deviceId/approve", checkAdminApiKey, async (req, res) => {

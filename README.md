@@ -33,15 +33,15 @@ curl http://localhost:3000/ping
 
 ## Scripts disponibles
 
-| Commande                               | Description                                    |
-| -------------------------------------- | ---------------------------------------------- |
-| `pnpm start`                           | Lance le serveur                               |
-| `pnpm watch`                           | Lance le serveur en mode watch (développement) |
-| `pnpm typecheck`                       | Vérifie les types TypeScript                   |
-| `pnpm simulate:device`                 | Simule un device IoT                           |
-| `pnpm admin:approve-device <deviceId>` | Approuve un device                             |
-| `pnpm admin:revoke-device <deviceId>`  | Révoque un device                              |
-| `pnpm db:reset`                        | Remet à zéro la base de données                |
+| Commande                               | Description                                    |     |     |
+| -------------------------------------- | ---------------------------------------------- | --- | --- |
+| `pnpm start`                           | Lance le serveur                               |     |     |
+| `pnpm watch`                           | Lance le serveur en mode watch (développement) |     |     |
+| `pnpm typecheck`                       | Vérifie les types TypeScript                   |     |     |
+| `pnpm simulate:device`                 | Simule un device IoT                           |     |     |
+| `pnpm admin:approve-device <deviceId>` | Approuve un device                             |     |     |
+| `pnpm admin:revoke-device <deviceId>`  | Révoque un device                              |     |     |
+| `pnpm db:reset`                        | Remet à zéro la base de données                |     |     |
 
 ## Structure du projet
 

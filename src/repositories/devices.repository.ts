@@ -1,6 +1,8 @@
 import { getDB } from "../db.ts";
 import type { Device } from "../type.ts";
 
+
+// POST devices/register
 export const findDeviceByDeviceId = async (deviceId: string): Promise<Device | null> => {
     
     const db = getDB();
@@ -19,12 +21,9 @@ export const findDeviceByDeviceId = async (deviceId: string): Promise<Device | n
 
 
 export const createDevice = async(deviceData: Device): Promise<Device> => {
-
     const db = getDB();
 
     const result = await db.collection("devices").insertOne(deviceData);
-
-    //console.log(result);
 
     deviceData._id = result.insertedId;
 
@@ -48,3 +47,22 @@ export const deleteDevice = async (deviceId: string): Promise<void> => {
     
     return result.value;
 };*/
+
+
+
+// GET devices/me
+export const findDeviceByDeviceAccessKey = async (deviceAccessKey: string): Promise<Device | null> => {
+
+    const db = getDB();
+
+    const device = await db.collection("devices").findOne({ deviceAccessKey });
+
+    if(device)
+    {
+        return device as Device;
+    }
+    else
+    {
+        return null;
+    }
+};

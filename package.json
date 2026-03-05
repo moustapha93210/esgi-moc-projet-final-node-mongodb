@@ -7,7 +7,7 @@
   "type": "module",
   "scripts": {
     "start": "node src/server.ts",
-    "watch": "node --watch src/server.ts",
+    "watch": "nodemon --legacy-watch --exec node src/server.ts",
     "typecheck": "tsc",
     "format": "prettier --write \"src/**/*.ts\" \"scripts/**/*.ts\"",
     "simulate:device": "node scripts/simulate-device.ts",
@@ -25,6 +25,7 @@
     "@tsconfig/node24": "^24.0.0",
     "@types/express": "^5.0.0",
     "@types/node": "^24.10.9",
+    "nodemon": "^3.1.14",
     "prettier": "^3.8.0",
     "tsx": "^4.21.0",
     "typescript": "^5.7.0"

@@ -20,8 +20,23 @@
               "icon": "lucide-file",
               "title": "README"
             }
+          },
+          {
+            "id": "319c85f0c7a7d09f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "README.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "README"
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -171,17 +186,23 @@
   },
   "left-ribbon": {
     "hiddenItems": {
+      "bases:Créer une nouvelle base": false,
       "switcher:Ouvrir le sélecteur rapide": false,
       "graph:Ouvrir la vue graphique": false,
       "canvas:Créer une nouvelle toile": false,
       "daily-notes:Ouvrir la note quotidienne": false,
       "templates:Insérer le modèle": false,
-      "command-palette:Ouvrir la palette de commandes": false,
-      "bases:Create new base": false
+      "command-palette:Ouvrir la palette de commandes": false
     }
   },
-  "active": "1b6bc42895f56590",
+  "active": "319c85f0c7a7d09f",
   "lastOpenFiles": [
+    "_tmp_6982_9a67c5c826ec3411f57504e42db3eeec",
+    "_tmp_6958_4334593f6476ac37d49cdcd8cea5e2cd",
+    "src/routes/devices.routes.ts",
+    "scripts/README.md",
+    "src/controllers/devices.controllers.ts",
+    "src/controllers",
     "pnpm-lock.yaml.3871964937",
     "_tmp_2567_1be525724ad5aaeb761699a917fd8c5f",
     "_tmp_1553_78cee57768e09c6006a7b5f10b70c2df",
