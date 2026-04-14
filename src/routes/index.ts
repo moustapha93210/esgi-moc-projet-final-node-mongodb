@@ -1,18 +1,18 @@
-import { Router } from "express";
+import { type Request, type Response, type NextFunction, Router } from "express";
 import pingRoutes from "../ping/ping.routes.ts";
 import { adminController } from "../admin/admin.controller.ts";
-import { devicesController } from "../devices/devices.controller.ts";
+import devicesRoutes from "./devices.routes.ts";
 
 const router = Router();
 
 router.use(pingRoutes);
+router.use(devicesRoutes);
 
-router.post("/devices/register", devicesController.register);
 
-const checkAdminApiKey = (req, res, next) => {
-  const adminApiKey = req.headers["x-admin-api-key"];
+const checkAdminApiKey = (req : Request, res: Response, next : NextFunction) => {
+  const adminApiKey = req.headers["x-api-key"];
   if (adminApiKey !== process.env.ADMIN_API_KEY) {
-    return res.status(403).json({ message: "Forbidden" });
+    return res.status(401).json({ message: "Unauthorized" });
   }
   next();
 };
@@ -23,14 +23,21 @@ adminRoutes.get(
   checkAdminApiKey,
   adminController.listDevices,
 );
+adminRoutes.get(
+  "/admin/devices/:deviceId",
+  checkAdminApiKey,
+  adminController.getDevice,
+);
 adminRoutes.post(
   "/admin/devices/:deviceId/approve",
-  checkAdminApiKey,
-  async (req, res) => {
-    res.json({ ok: true });
-  },
-);
+  checkAdminApiKey,adminController.approveDevice);
 
+
+
+adminRoutes.post(
+  "/admin/devices/:deviceId/revoke",
+  checkAdminApiKey,adminController.deleteDevice);
+ 
 router.use(adminRoutes);
 
 export default router;
