@@ -1,8 +1,8 @@
 import { getDB } from "../db.ts";
-import type { Device } from "../type.ts";
+import type { Device, DeviceStatus } from "../type.ts";
 
 
-// POST devices/register
+// POST /devices/register
 export const findDeviceByDeviceId = async (deviceId: string): Promise<Device | null> => {
     
     const db = getDB();
@@ -21,6 +21,7 @@ export const findDeviceByDeviceId = async (deviceId: string): Promise<Device | n
 
 
 export const createDevice = async(deviceData: Device): Promise<Device> => {
+    
     const db = getDB();
 
     const result = await db.collection("devices").insertOne(deviceData);
@@ -32,25 +33,15 @@ export const createDevice = async(deviceData: Device): Promise<Device> => {
 
 
 export const deleteDevice = async (deviceId: string): Promise<void> => {
+    
     const db = getDB();
     await db.collection("devices").deleteOne({ deviceId });
 };
 
-/*export const updateDevice = async (deviceId: string, updates: any): Promise<Device | null> => {
-    const db = getDB();
-    
-    const result = await db.collection("devices").findOneAndUpdate(
-        { deviceId: deviceId },
-        { $set: updates },
-        { returnDocument: "after" }
-    );
-    
-    return result.value;
-};*/
 
 
 
-// GET devices/me
+// GET /devices/me
 export const findDeviceByDeviceAccessKey = async (deviceAccessKey: string): Promise<Device | null> => {
 
     const db = getDB();
@@ -65,4 +56,17 @@ export const findDeviceByDeviceAccessKey = async (deviceAccessKey: string): Prom
     {
         return null;
     }
+};
+
+
+
+// POST /admin/devices/:id/approve et /admin/devices/:id/revoke
+export const updateDeviceStatus = async (deviceId: string, newStatus: DeviceStatus): Promise<void> => {
+    
+    const db = getDB();
+    
+    await db.collection("devices").updateOne(
+        { deviceId: deviceId },
+        { $set: { status: newStatus } },
+    );
 };

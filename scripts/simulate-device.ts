@@ -119,9 +119,8 @@ const registerDevice = async (
 };
 
 // Vérification du status
-const checkStatus = async (
-  deviceKey: string,
-): Promise<{ status: string; deviceId: string }> => {
+const checkStatus = async (deviceKey: string,): Promise <{ status: string; deviceId: string }> => {
+  
   const response = await fetch(`${API_URL}/devices/me`, {
     headers: { "x-device-key": deviceKey },
   });

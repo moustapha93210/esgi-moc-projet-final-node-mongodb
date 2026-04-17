@@ -2,9 +2,9 @@ import { type Request, type Response } from "express";
 import { type DeviceType, type DeviceStatus, type Device } from "../type.ts";
 import { randomUUID } from "crypto";
 import { createDevice, deleteDevice, findDeviceByDeviceId,  findDeviceByDeviceAccessKey} from "../repositories/devices.repository.ts";
-import { z } from "zod";
 import { type DeviceSchemaInput } from "../schema/device.schema.ts";
 
+// POST /devices/register
 export const postDevicesRegister = async (req: Request, res: Response) => {
   try {
 
@@ -17,7 +17,7 @@ export const postDevicesRegister = async (req: Request, res: Response) => {
 
     // Vérifier si le device existe déjà
     const existing = await findDeviceByDeviceId(deviceRecuperated.deviceId);
-    //console.log("Device existant ? ", existing);
+    //console.log("Device existe ?: ", existing);
 
     if (existing) {
 
@@ -47,32 +47,54 @@ export const postDevicesRegister = async (req: Request, res: Response) => {
 
     return response;
 
-  } catch (error) {
-    res.status(500).json({ error: "Internal Server Error" });
+  } catch(error) {
+        
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error" });
   }
 };
 
+
+
+// GET /register/devices/Me
 export const getDeviceMe = async (req: Request, res: Response) => {
     try {
 
-        const deviceRecuperated = req.get("x-device-key");
+        const headerRecuperated = req.get("x-device-key");
 
         // Vérifier que le header existe
-        if(!deviceRecuperated)
+        if(!headerRecuperated)
         {
-            return res.status(401).json({ error: "Unauthorized" });
-        }
-
-        const existing = await findDeviceByDeviceAccessKey(deviceRecuperated);
-
-        if(existing)
-        {
-            const response = res.status(200).
+            return res.status(401).json({ message: "Unauthorized" });
         }
 
 
-    } catch {
+        const existing = await findDeviceByDeviceAccessKey(headerRecuperated);
+        //console.log("existing: ", existing);
+
+        if(!existing)
+        {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        if(existing.status === "revoked")
+        {
+            return res.status(403).json({ message: "Forbidden" });
+        }
+
+        const response = res.status(200).json({
+          deviceId: existing.deviceId,
+          name: existing.name,
+          type: existing.type,
+          status: existing.status
+        });
+
+        return response;
+
+    } catch(error) {
         
+        console.error(error);
+        return res.status(500).json({ message: "Internal server error" });
     }
 
 };
