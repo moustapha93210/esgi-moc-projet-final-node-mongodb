@@ -2,8 +2,18 @@ import { getDB } from "../db.ts";
 import type { Telemetry } from "../types.ts";
 
 export const createTelemetry = async (
-    data: Telemetry): Promise<void> => {
+    telemetryData: Telemetry): Promise<Telemetry> => {
         const db = getDB();
-        await db.collection("telemetry").insertOne(data);
-
+        const result = await db.collection("telemetry").insertOne(telemetryData);
+    telemetryData._id = result.insertedId;
+    return telemetryData;
     };
+
+export const findTelemetryByDeviceId = async (deviceId: string, limit: number, offset: number): Promise<{data:Telemetry[], total: number }> => {
+    const db= getDB();
+
+    const data = await db.collection("telemetry").find({ deviceId}).sort({ timestamp: -1}).skip(offset).limit(limit).toArray();
+    const total = await db.collection("telemetry").countDocuments({ deviceId });
+
+    return { data: data as Telemetry[], total};
+}     
