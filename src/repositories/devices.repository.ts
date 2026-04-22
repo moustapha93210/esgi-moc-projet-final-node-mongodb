@@ -20,7 +20,7 @@ export const findDeviceByDeviceId = async (deviceId: string): Promise<Device | n
 };
 
 
-export const createDevice = async(deviceData: Device): Promise<Device> => {
+export const createDevice = async (deviceData: Device): Promise<Device> => {
     
     const db = getDB();
 
@@ -69,4 +69,18 @@ export const updateDeviceStatus = async (deviceId: string, newStatus: DeviceStat
         { deviceId: deviceId },
         { $set: { status: newStatus } },
     );
+};
+
+
+
+// GET /admin/devices?status=:status
+export const findDevicesByStatus = async (status?: string): Promise<Device[]> => {
+
+    const db = getDB();
+
+    const filter = status ? { status } : {} ;
+
+    const device = await db.collection("devices").find(filter).toArray();
+
+    return device as Device[];
 };
