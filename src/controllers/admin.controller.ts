@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { findDeviceByDeviceId } from "../repositories/devices.repository.ts";
 import { findAllDevices } from "../repositories/devices.repository.ts";
 import { updateDevice } from "../repositories/devices.repository.ts";
-import { findTelemetryByDeviceId } from "../repositories/telemetry.repository.ts";
+import { findLatestTelemetry, findTelemetryByDeviceId } from "../repositories/telemetry.repository.ts";
 
 export const adminController = {
   async listDevices(_req: Request, res: Response) {
@@ -76,7 +76,7 @@ async getTelemetry(req: Request, res: Response) {
     if (!device) {
       return res.status(404).json({ message: "Device not found"});
     }
-    const limit = Math.min(Number(req.query.limot) || 20, 100);
+    const limit = Math.min(Number(req.query.limit) || 20, 100);
     const offset = Number(req.query.offset) || 0;
 
     const { data, total } = await findTelemetryByDeviceId(deviceId, limit, offset);
@@ -84,7 +84,29 @@ async getTelemetry(req: Request, res: Response) {
   } catch (error) {
     res.status(500).json({ message: "Erreur serveur" });
   }
-}
+},
+
+async getLatestTelemetry(req: Request, res: Response) {
+
+  try {
+    const { deviceId} = req.params;
+    const device = await findDeviceByDeviceId(deviceId);
+    if (!device) {
+      return res.status(404).json({ message: "Device not found"});
+    }
+    const latest = await findLatestTelemetry(deviceId);
+    if (!latest) {
+      return res.status(404).json({ message: "No telemetry found for this device"});
+    }
+    res.json(latest);
+  } catch (error) {
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+
+},
+
+
+
 
 };
 

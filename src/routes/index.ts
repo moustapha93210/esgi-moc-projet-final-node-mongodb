@@ -55,6 +55,14 @@ adminRoutes.post(
   adminController.deleteDevice,
 );
 
+adminRoutes.get(
+  "/admin/devices/:deviceId/telemetry/latest",
+  checkAdminApiKey,
+  adminController.getLatestTelemetry,
+);
+
+
+
 router.use(adminRoutes);
 
 export default router;

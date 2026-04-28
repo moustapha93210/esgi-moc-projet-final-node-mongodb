@@ -16,4 +16,16 @@ export const findTelemetryByDeviceId = async (deviceId: string, limit: number, o
     const total = await db.collection("telemetry").countDocuments({ deviceId });
 
     return { data: data as Telemetry[], total};
-}     
+
+}
+
+export const findLatestTelemetry = async (deviceId: string): Promise<Telemetry | null> => {
+    const db = getDB();
+    const result = await db.collection("telemetry").findOne({ deviceId }, { sort: { timestamp: -1}});
+
+    if (result) {
+        return result as Telemetry;
+    }else {
+        return null;
+    }
+}
