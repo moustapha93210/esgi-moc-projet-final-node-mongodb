@@ -9,4 +9,5 @@ telemetryRoutes.post("/", postTelemetry);
 
 
 
+
 export default telemetryRoutes;
