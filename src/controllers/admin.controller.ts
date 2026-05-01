@@ -2,7 +2,7 @@ import type { Request, Response } from "express";
 import { findDeviceByDeviceId } from "../repositories/devices.repository.ts";
 import { findAllDevices } from "../repositories/devices.repository.ts";
 import { updateDevice } from "../repositories/devices.repository.ts";
-import { findLatestTelemetry, findTelemetryByDeviceId } from "../repositories/telemetry.repository.ts";
+import { findLatestTelemetry, findTelemetryByDeviceId, findTelemetryStats } from "../repositories/telemetry.repository.ts";
 
 export const adminController = {
   async listDevices(_req: Request, res: Response) {
@@ -106,12 +106,50 @@ async getLatestTelemetry(req: Request, res: Response) {
 },
 
 
+async getStats(req: Request, res: Response) {
+  try {
+    const { deviceId } = req.params;
+    const device = await findDeviceByDeviceId(deviceId);
+    if (!device) {
+      return res.status(404).json({ message: "Device not found" });
+}
 
+const from = new Date(req.query.from as string || 0 );
+const to = new Date(req.query.to as string || Date.now());
+
+const stats = await findTelemetryStats(deviceId, from, to);
+
+if (device.type === "climate") {
+  return res.json({
+    from: from.toISOString(),
+    to: to.toISOString(),
+    count: stats.count,
+    temperature: {
+      min: stats.tempMin,
+      max: stats.tempMax,
+      avg: stats.tempAvg
+    },
+    humidity: {
+      min: stats.humMin, 
+      max: stats.humMax,
+      avg: stats.humAvg
+    },
+  });
+}
+ else {
+  return res.json({
+    from: from.toISOString(),
+    to: to.toISOString(),
+    count: stats.count,
+    motionDetected: stats.motionDetected,
+  });
+}
+} catch (error) {
+  res.status(500).json({ message: "Erreur serveur" });
+}
+
+}
 
 };
-
-
-
-
 
 
