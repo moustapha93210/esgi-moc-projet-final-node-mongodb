@@ -1,7 +1,8 @@
 import { getDB } from "../db.ts";
 import type { Device, DeviceStatus } from "../types.ts";
 
-// POST devices/register
+
+// Cherche un device par son deviceId
 export const findDeviceByDeviceId = async (
   deviceId: string,
 ): Promise<Device | null> => {
@@ -15,7 +16,7 @@ export const findDeviceByDeviceId = async (
     return null;
   }
 };
-
+// Insère un nouveau device dans MongoDB et attache l'_id généré à l'objet
 export const createDevice = async (deviceData: Device): Promise<Device> => {
   const db = getDB();
 
@@ -25,12 +26,12 @@ export const createDevice = async (deviceData: Device): Promise<Device> => {
 
   return deviceData;
 };
-
+// Supprime un device
 export const deleteDevice = async (deviceId: string): Promise<void> => {
   const db = getDB();
   await db.collection("devices").deleteOne({ deviceId });
 };
-
+// Met à jour un device et retourne le document après modification
 export const updateDevice = async (
   deviceId: string,
   updates: Partial<Device>,
@@ -48,7 +49,7 @@ export const updateDevice = async (
   return result as Device | null;
 };
 
-// GET devices/me
+// Cherche un device par sa deviceAccessKey
 export const findDeviceByDeviceAccessKey = async (
   deviceAccessKey: string,
 ): Promise<Device | null> => {
@@ -62,7 +63,7 @@ export const findDeviceByDeviceAccessKey = async (
     return null;
   }
 };
-
+// Retourne tous les devices avec un filtre optionnel sur le status
 export const findAllDevices = async (status?: string): Promise<Device[]> => {
   const db = getDB();
 

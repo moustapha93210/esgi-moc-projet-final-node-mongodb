@@ -3,7 +3,7 @@ import { postDevicesRegister } from "../controllers/devices.controller.ts";
 
 const devicesRoutes = Router();
 
-// Créer un handler pour les requêtes entrantes POST sur /devices
+// Route pour l'enregistrement d'un device
 devicesRoutes.post("/register", postDevicesRegister);
 
 export default devicesRoutes;

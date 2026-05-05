@@ -9,44 +9,53 @@ import { createTelemetry } from "../repositories/telemetry.repository.ts";
 export const postTelemetry = async (req: Request, res: Response) => {
 
     try {
-    const device = (req as Request & { device: Device}).device;
+      const device = (req as Request & { device: Device }).device;
 
-        if (device.status !== "active") {
-             res.status(403).json({ message: "Forbidden" });
-             return;
-        }
+      if (device.status !== "active") {
+        res.status(403).json({ message: "Forbidden" });
+        return;
+      }
 
-        let schema;
-        if(device.type === "climate") {
-            schema = climateTelemetrySchema;
-        }
-        else {
-            schema = presenceTelemetrySchema;
-        }
+      // On choisit le bon schéma Zod selon le type du device
+      let schema;
+      if (device.type === "climate") {
+        schema = climateTelemetrySchema;
+      } else {
+        schema = presenceTelemetrySchema;
+      }
 
-       const validationResult = schema.safeParse(req.body);
-       if(!validationResult.success) {
-        res.status(400).json({ message: "Invalid input", errors: validationResult.error.issues})
-       return;
-    }     
+      // Validation du body avec le bon schéma
+      const validationResult = schema.safeParse(req.body);
+      if (!validationResult.success) {
+        res.status(400).json({
+          message: "Invalid input",
+          errors: validationResult.error.issues,
+        });
+        return;
+      }
+      // Construction de l'objet Telemetry à insérer dans MongoDB
+      const newTelemetry: Telemetry = {
+        deviceId: device.deviceId,
+        timestamp: new Date(validationResult.data.timestamp),
+        battery: validationResult.data.battery,
+      };
+      // Ajout des champs spécifiques selon le type du device
+      if (device.type === "climate") {
+        newTelemetry.temperature = (
+          validationResult.data as { temperature: number }
+        ).temperature;
+        newTelemetry.humidity = (
+          validationResult.data as { humidity: number }
+        ).humidity;
+      } else {
+        newTelemetry.motion = (
+          validationResult.data as { motion: boolean }
+        ).motion;
+      }
 
-  const newTelemetry : Telemetry = {
-    deviceId: device.deviceId,
-    timestamp: new Date(validationResult.data.timestamp),
-    battery: validationResult.data.battery,
-  };
-
-  if (device.type === "climate") {
-    newTelemetry.temperature = (validationResult.data as { temperature: number}).temperature;
-    newTelemetry.humidity = (validationResult.data as { humidity: number}).humidity;    
-    } else {
-        newTelemetry.motion = (validationResult.data as { motion: boolean}).motion;
-    }
-  
-    await createTelemetry(newTelemetry);
-    res.status(201).json({ ok : true });
-
-} catch {
+      await createTelemetry(newTelemetry);
+      res.status(201).json({ ok: true });
+    } catch {
     res.status(500).json({ error: "Internal Server Error" });
 }
 };

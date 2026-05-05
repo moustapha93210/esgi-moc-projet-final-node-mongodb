@@ -4,7 +4,7 @@ API de monitoring IoT pour smart home - Projet final Node.js & MongoDB.
 
 ## Prérequis
 
-- Node.js 24 LTS
+- Node.js 22 LTS
 - pnpm
 - Docker (pour MongoDB)
 
@@ -45,26 +45,37 @@ curl http://localhost:3000/ping
 
 ## Structure du projet
 
-```
 src/
-├── app.ts                  # Configuration Express
-├── server.ts               # Point d'entrée
-├── db.ts                   # Connexion MongoDB
+├── app.ts                          # Configuration Express
+├── server.ts                       # Point d'entrée
+├── db.ts                           # Connexion MongoDB
+├── types.ts                        # Types TypeScript
+├── errors/
+│   └── http-error.ts               # Classe HttpError
+├── middlewares/
+│   ├── auth.middleware.ts           # Auth device (x-device-key)
+│   ├── validate.middleware.ts       # Validation Zod
+│   └── error.middleware.ts          # Gestion des erreurs
 ├── routes/
-│   └── index.ts            # Agrégateur de routes
-├── ping/                   # Module ping (exemple)
-│   ├── ping.controller.ts
-│   └── ping.routes.ts
-├── devices/                # À implémenter
-├── telemetry/              # À implémenter
-└── admin/                  # À implémenter
-```
+│   ├── index.ts                     # Agrégateur de routes
+│   ├── devices.routes.ts            # Routes devices
+│   ├── telemetry.routes.ts          # Routes télémétrie
+│   └── admin.routes.ts              # Routes admin
+├── controllers/
+│   ├── devices.controller.ts        # Handlers devices
+│   ├── telemetry.controller.ts      # Handlers télémétrie
+│   └── admin.controller.ts          # Handlers admin
+├── repositories/
+│   ├── devices.repository.ts        # Accès MongoDB devices
+│   └── telemetry.repository.ts      # Accès MongoDB télémétrie
+└── schema/
+├── devices.schema.ts            # Schéma Zod devices
+└── telemetry.schema.ts          # Schéma Zod télémétrie
 
-## Ce que vous devez implémenter
+## Endpoints
 
-Consultez le fichier **CONSIGNES.md** pour les spécifications complètes du projet.
-
-### Endpoints à développer
+**Public**
+- `GET /ping` - Health check
 
 **Device (auth: `x-device-key`)**
 - `POST /devices/register` - Demande d'accès
