@@ -12,7 +12,7 @@ export const connectDB = async (): Promise<Db> => {
   client = new MongoClient(MONGODB_URI);
   await client.connect();
 
-  db = client.db();
+  db = client.db("iot_monitoring");
   console.log("Connected to MongoDB");
 
   return db;
